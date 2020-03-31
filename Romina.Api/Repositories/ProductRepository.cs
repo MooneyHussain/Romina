@@ -3,19 +3,16 @@ using Romina.Api.Models;
 
 namespace Romina.Api.Repositories
 {
-    public class ProductRepository
+    public class ProductRepository: IProductRepository
     {
         public Product GetProductById(string id)
         {
-            return new Product 
-                {
-                    Description = " hat", 
-                    Make = "nike", 
-                    Model = "sport", 
-                    Price = 10.0, 
-                    ProductId = "111"
-
-                };
+            throw new NotImplementedException();
         }
+    }
+
+    public interface IProductRepository
+    {
+        Product GetProductById(string id);
     }
 }

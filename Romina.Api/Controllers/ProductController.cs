@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using Romina.Api.Models;
 using Romina.Api.Repositories;
 
@@ -7,12 +6,17 @@ namespace Romina.Api.Controllers
 {
     public class ProductController : Controller
     {
+        private readonly IProductRepository _productRepository;
+
+        public ProductController(IProductRepository productRepository)
+        {
+            _productRepository = productRepository;
+        }
+
         [HttpGet("{id}")]
         public ActionResult<Product> Get(string id)
         {
-            var repository = new ProductRepository();
-            var product = repository.GetProductById(id);
-            return product;
+            return _productRepository.GetProductById(id);
         }
 
         [HttpPost]
