@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using Romina.Api.Models;
+using Romina.Api.Repositories;
 
 namespace Romina.Api.Controllers
 {
     public class ProductController : Controller
     {
         [HttpGet("{id}")]
-        public ActionResult<string> Get(string id)
+        public ActionResult<Product> Get(string id)
         {
-            throw new NotImplementedException();
+            var repository = new ProductRepository();
+            var product = repository.GetProductById(id);
+            return product;
         }
 
         [HttpPost]
@@ -16,4 +20,6 @@ namespace Romina.Api.Controllers
         {
         }
     }
+
+    
 }
