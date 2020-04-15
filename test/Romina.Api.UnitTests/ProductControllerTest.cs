@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using Microsoft.AspNetCore.Mvc;
+using Moq;
 using Romina.Api.Controllers;
 using Romina.Api.Models;
 using Romina.Api.Repositories;
@@ -35,7 +36,19 @@ namespace Romina.Api.UnitTests
         [Fact]
         public void GetId_WhenProductIdDoesNotExist_ThenReturnNotFound()
         {
+            var productRepository = new Mock<IProductRepository>();
+            var controller = new ProductController(productRepository.Object);
+            productRepository.Setup(pr => pr.GetProductById(BasicId)).Returns(new
+                Product
+                {
 
+                });
+
+            var result = controller.Get("999");
+            var expectedResult = new NotFoundResult();
+
+            Assert.Null(result.Value);
+            Assert.Equal(expectedResult.GetType(), result.Result.GetType());
         }
     }
 }

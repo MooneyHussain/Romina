@@ -16,7 +16,13 @@ namespace Romina.Api.Controllers
         [HttpGet("{id}")]
         public ActionResult<Product> Get(string id)
         {
-            return _productRepository.GetProductById(id);
+            var product = _productRepository.GetProductById(id);
+            if (product != null)
+            {
+                return product;
+            }
+
+            return new NotFoundResult();
         }
 
         [HttpPost]
