@@ -1,4 +1,6 @@
-﻿using System;
+﻿using System.Data.SqlClient;
+using System.Linq;
+using Dapper;
 using Romina.Api.Models;
 
 namespace Romina.Api.Repositories
@@ -7,7 +9,14 @@ namespace Romina.Api.Repositories
     {
         public Product GetProductById(string id)
         {
-            throw new NotImplementedException();
+            Product product = null;
+            using (SqlConnection connection = new SqlConnection("localConnectionString"))
+            {
+                var products = connection.Query<Product>("SELECT * FROM PRODUCT WHERE ID= @id",id).ToList();
+                product = products[0];
+            }
+
+            return product;
         }
     }
 
