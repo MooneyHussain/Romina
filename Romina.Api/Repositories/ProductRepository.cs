@@ -1,6 +1,7 @@
 ﻿using System.Data.SqlClient;
 using System.Linq;
 using Dapper;
+using Microsoft.Extensions.Configuration;
 using Romina.Api.Models;
 
 namespace Romina.Api.Repositories
@@ -24,4 +25,5 @@ namespace Romina.Api.Repositories
     {
         Product GetProductById(string id);
     }
+
 }
