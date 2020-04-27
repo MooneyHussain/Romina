@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Romina.Api.Models;
 using System;
 
 namespace Romina.Api.Controllers
@@ -6,7 +7,7 @@ namespace Romina.Api.Controllers
     public class ProductController : Controller
     {
         [HttpGet("{id}")]
-        public ActionResult<string> Get(string id)
+        public ActionResult<Product> Get(string id)
         {
             throw new NotImplementedException();
         }
@@ -14,6 +15,7 @@ namespace Romina.Api.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
+            throw new NotImplementedException();
         }
     }
 }
