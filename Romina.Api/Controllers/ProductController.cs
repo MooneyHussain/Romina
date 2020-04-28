@@ -4,6 +4,7 @@ using Romina.Api.Repositories;
 
 namespace Romina.Api.Controllers
 {
+    [Route("api/product")]
     public class ProductController : Controller
     {
         private readonly IProductRepository _productRepository;
