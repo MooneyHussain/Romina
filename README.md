@@ -17,7 +17,7 @@ The API should expose the following endpoints. For ease of use we do **not** nee
 
 ### Object Types
 
-Below is an example of a typical `GET` request
+Below is an example of a reponse for a valid `GET` request
 
 ```json
 {
