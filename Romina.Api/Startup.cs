@@ -4,37 +4,33 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Romina.Api.Repositories;
+using Romina.Api.Settings;
 
 namespace Romina.Api
 {
     public class Startup
     {
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional : true)
-                .AddEnvironmentVariables();
-
-            Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
+        // This method gets called by the runtime (after program.cs). Use this method to add services to the container.
+        // add all dependency injection in here 
+        // get settings from appsettings and put them into objects for later use 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOptions();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            // Add functionality to inject IOptions<T>
-            services.AddOptions();
+            services.AddTransient<IProductRepository, ProductRepository>();
 
-            // Add our Config object so it can be injected
-            services.Configure<IProductRepository>(Configuration.GetSection("MySettings"));
-
-            // *If* you need access to generic IConfiguration this is **required**
-            services.AddSingleton<IConfiguration>(Configuration);
+            services.AddSingleton(new SqlSettings
+            {
+                ConnectionString = Configuration.GetValue<string>("SqlSettings:ConnectionString")
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -49,11 +45,9 @@ namespace Romina.Api
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             app.UseMvc();
         }
-
-
     }
 }
