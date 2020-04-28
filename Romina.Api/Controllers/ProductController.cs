@@ -30,6 +30,4 @@ namespace Romina.Api.Controllers
         {
         }
     }
-
-    
 }
