@@ -12,8 +12,8 @@ The API should expose the following endpoints. For ease of use we do **not** nee
 
 | Method | Endpoint                | Usage                 | Return Object |
 | ------ | ----------------------- | --------------------- | ------------- |
-| GET    | /v1/product/{productId} | Gets a product        | Product       |
-| POST   | /v1/product             | Creates a new product | -             |
+| GET    | api/v1/product/{productId} | Gets a product        | Product       |
+| POST   | api/v1/product             | Creates a new product | -             |
 
 ### Object Types
 
@@ -55,7 +55,7 @@ The process should include the following
 
 ## Acceptance Criteria
 
-Your solution should do the following
+### High Level Requirements
 
 - API should respond with appropriate HTTP status codes
 - API should use Cosmos DB to persist data
@@ -65,6 +65,26 @@ Your solution should do the following
 - API should have unit and acceptance tests
 - Solution should have an arm template
 - Solution should have a script that will build, test and deploy the API
+
+### Additional Requirements
+
+- Create a new GET endpoint called search 
+  - should be accessible via `api/v1/search?filter=nike shoes`
+  - should return a list of products
+- Should look for matches in the make, model and description of a product
+- Should apply prioritisation rules when returning (see below)
+  - Make (highest priority)
+  - Model 
+  - Description (lowest priority)
+
+#### GWTS
+
+**Given** we have a valid search request for "Nike"   
+**When** we have 3 products in the database    
+**And** product A contains "Nike" in `Make`    
+**And** product B contains "Nike" in `Model`  
+**And** product C contains "Nike" in `Description`  
+**Then** return product information with the order of Product A, B and then C  
 
 ## Useful Links / Reading Material
 
