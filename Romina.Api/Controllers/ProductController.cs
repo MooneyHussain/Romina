@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Romina.Api.Models;
 using Romina.Api.Repositories;
 
@@ -25,9 +27,17 @@ namespace Romina.Api.Controllers
             return product;
         }
 
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpGet("{make}")]
+        //should this method always be of type actionresult? Or can I have it return List<Product>
+        public ActionResult<Product> GetByMake(string make)
         {
+            var product = _productRepository.GetProductByMake(make);
+            if (product == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return product;
         }
     }
 

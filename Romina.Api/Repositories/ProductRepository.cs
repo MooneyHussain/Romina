@@ -1,4 +1,5 @@
-﻿using Dapper;
+﻿using System.Collections.Generic;
+using Dapper;
 using Romina.Api.Models;
 using Romina.Api.Settings;
 using System.Data.SqlClient;
@@ -28,11 +29,17 @@ namespace Romina.Api.Repositories
 
             return product;
         }
+
+        public Product GetProductByMake(string basicMake)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public interface IProductRepository
     {
         Product GetProductById(string id);
+        Product GetProductByMake(string basicMake);
     }
 
 }

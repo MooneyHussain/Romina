@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Romina.Api.Controllers;
 using Romina.Api.Models;
@@ -10,6 +11,8 @@ namespace Romina.Api.UnitTests
     public class ProductControllerTest
     {
         private const string BasicId = "111";
+        private const string BasicMake = "Nike";
+        
 
         [Fact]
         public void GetId_WhenProductIdExists_ThenReturnProduct()
@@ -44,7 +47,43 @@ namespace Romina.Api.UnitTests
 
                 });
 
-            var result = controller.Get("999");
+            var result = controller.Get("999"); //is this string supposed to be BasicId
+            var expectedResult = new NotFoundResult();
+
+            Assert.Null(result.Value);
+            Assert.Equal(expectedResult.GetType(), result.Result.GetType());
+        }
+
+        [Fact]
+        public void GetMake_WhenProductMakeExists_ThenReturnProduct()
+        {
+            var productRepository = new Mock<IProductRepository>();
+            var controller = new ProductController(productRepository.Object);
+            productRepository.Setup(pr => pr.GetProductByMake(BasicMake))
+                .Returns(new Product
+                {
+                    Description = " trouser",
+                    Make = "Nike",
+                    Model = "sport",
+                    Price = 16.0,
+                    ProductId = "112"
+                });
+
+            var result = controller.GetByMake(BasicMake);
+
+            Assert.NotNull(result.Value);
+            Assert.Equal(BasicMake, result.Value.Make);
+        }
+
+        [Fact]
+        public void GetMake_WhenProductMakeDoesNotExist_ThenReturnProduct()
+        {
+            var productRepository = new Mock<IProductRepository>();
+            var controller = new ProductController(productRepository.Object);
+            productRepository.Setup(pr => pr.GetProductByMake("Adidas"))
+                .Returns(new Product {});
+
+            var result = controller.GetByMake("Adidas");
             var expectedResult = new NotFoundResult();
 
             Assert.Null(result.Value);
