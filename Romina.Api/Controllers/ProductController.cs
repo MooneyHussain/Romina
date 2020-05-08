@@ -40,5 +40,17 @@ namespace Romina.Api.Controllers
 
             return product;
         }
+
+        [HttpGet("{model}")]
+        public ActionResult<Product> GetByModel(string model)
+        {
+            var product = _productRepository.GetProductByModel(model);
+            if (product == null)
+            {
+                return new NotFoundResult();
+            }
+
+            return product;
+        }
     }
 }

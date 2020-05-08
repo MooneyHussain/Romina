@@ -34,12 +34,18 @@ namespace Romina.Api.Repositories
         {
             throw new System.NotImplementedException();
         }
+
+        public Product GetProductByModel(object basicModel)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     public interface IProductRepository
     {
         Product GetProductById(string id);
         Product GetProductByMake(string basicMake);
+        Product GetProductByModel(object basicModel);
     }
 
 }
