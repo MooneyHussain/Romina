@@ -69,7 +69,7 @@ The process should include the following
 ### Additional Requirements
 
 - Create a new GET endpoint called search 
-  - should be accessible via `api/v1/product?filter=nike shoes`
+  - should be accessible via `api/product?filter=nike shoes`
   - should return a list of products
 - Should look for matches in the make, model and description of a product
 - Should apply prioritisation rules when returning (see below)
