@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Romina.Api.Handlers;
 using Romina.Api.Repositories;
 using Romina.Api.Settings;
 
@@ -22,10 +23,11 @@ namespace Romina.Api
         // get settings from appsettings and put them into objects for later use 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddOptions();
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<IProductHandler, ProductHandler>();
 
             services.AddSingleton(new SqlSettings
             {
