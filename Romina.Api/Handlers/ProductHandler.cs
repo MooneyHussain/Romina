@@ -1,13 +1,14 @@
 ﻿using Romina.Api.Models;
 using Romina.Api.Repositories;
-using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Romina.Api.Handlers
 {
     public class ProductHandler : IProductHandler
     {
         private readonly IProductRepository _productRepository;
+        
 
         public ProductHandler(IProductRepository productRepository)
         {
@@ -18,10 +19,14 @@ namespace Romina.Api.Handlers
         {
             var unsortedRelatedProducts = _productRepository.Query(filter);
 
-            // TODO: now we have our relevant products we want to order them correctly 
-            // have a look at the tests for this class and give this a go 
+            var sortedList = new List<Product>();
 
-            throw new NotImplementedException();
+            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Make == filter));
+            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Model == filter));
+            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Description == filter));
+
+            
+            return sortedList;
         }
     }
 
