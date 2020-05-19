@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Moq;
 using Romina.Api.Handlers;
 using Romina.Api.Models;
@@ -9,35 +10,8 @@ namespace Romina.Api.UnitTests.Handlers
 {
     public class ProductHandlerTests
     {
-        private Mock<IProductRepository> _productRepository;
-        private const string filter = "nike";
-
-        private readonly Product _nikeTrouser = new Product
-        {
-            Description = " trouser",
-            Make = "nike",
-            Model = "sport",
-            Price = 16.0,
-            ProductId = "111"
-        };
-
-        private readonly Product _nikeHat = new Product
-        {
-            Description = "nike",
-            Make = "Angola",
-            Model = "sport",
-            Price = 14.0,
-            ProductId = "112"
-        };
-        
-        private readonly Product _nikeGlove = new Product
-        {
-            Description = "glove",
-            Make = "Jacamo",
-            Model = "nike",
-            Price = 11.0,
-            ProductId = "113"
-        };
+        private readonly Mock<IProductRepository> _productRepository;
+        private const string Filter = "nike";
 
         public ProductHandlerTests()
         {
@@ -47,26 +21,35 @@ namespace Romina.Api.UnitTests.Handlers
         [Fact]
         public void GetProductsByFilter_WhenProductsExist_OrderByMakeThenModelThenDescrption()
         {
-            var filter = "nike";
             var handler = new ProductHandler(_productRepository.Object);
+            var nikeTrouser = CreateProduct("nike", "sport", "111", "trouser", 16.0);
+            var nikeGlove = CreateProduct("Jacamo", "nike", "113", "glove", 11);
+            var nikeHat = CreateProduct("Angola", "sport", "113", "nike", 14);
 
+            List<Product> listOfProducts = new List<Product> {nikeTrouser, nikeGlove, nikeHat};
 
-            List<Product> listOfProducts = new List<Product>();
-            listOfProducts.Add(_nikeTrouser);
-            listOfProducts.Add(_nikeGlove);
-            listOfProducts.Add(_nikeHat);
+            _productRepository.Setup(pr => pr.Query(Filter)).Returns(listOfProducts);
 
-            _productRepository.Setup(pr => pr.Query(filter)).Returns(listOfProducts);
+            var result = handler.GetProductsByFilter(ProductHandlerTests.Filter).ToList();
 
-            var result = handler.GetProductsByFilter(ProductHandlerTests.filter);
+            Assert.Equal(Filter, result[0].Make);
+            Assert.Equal(Filter, result[1].Model);
+            Assert.Equal(Filter, result[2].Description);
+        }
 
-            Assert.NotNull(listOfProducts[0]);
-            Assert.NotNull(listOfProducts[1]);
-            Assert.NotNull(listOfProducts[2]);
-            
-            Assert.Equal(filter, listOfProducts[0].Make);
-            Assert.Equal(filter, listOfProducts[1].Model);
-            Assert.Equal(filter, listOfProducts[2].Description);
+        private Product CreateProduct(
+            string make, string model, 
+            string productId, string description, 
+            double price)
+        {
+            return new Product
+            {
+                Model = model, 
+                Description = description, 
+                Make = make, 
+                Price = price,
+                ProductId = productId
+            };
         }
     }
 }

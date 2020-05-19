@@ -8,7 +8,6 @@ namespace Romina.Api.Handlers
     public class ProductHandler : IProductHandler
     {
         private readonly IProductRepository _productRepository;
-        
 
         public ProductHandler(IProductRepository productRepository)
         {
@@ -25,7 +24,6 @@ namespace Romina.Api.Handlers
             sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Model == filter));
             sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Description == filter));
 
-            
             return sortedList;
         }
     }

@@ -13,12 +13,11 @@ namespace Romina.Api.UnitTests.Controllers
     {
         private const string BasicId = "111";
         private const string BasicMake = "Nike";
-        private const string BasicModel = "sport";
 
         private readonly Mock<IProductRepository> _productRepository = new Mock<IProductRepository>();
         private readonly Mock<IProductHandler> _productHandler = new Mock<IProductHandler>();
 
-        private Product _nikeTrouser = new Product
+        private readonly Product _nikeTrouser = new Product
         {
             Description = " trouser",
             Make = "Nike",
@@ -26,25 +25,6 @@ namespace Romina.Api.UnitTests.Controllers
             Price = 16.0,
             ProductId = "111"
         };
-
-        private Product _nikeHat = new Product
-        {
-            Description = " hat",
-            Make = "Kangol",
-            Model = "Nike",
-            Price = 11.0,
-            ProductId = "112"
-        };
-        
-        private Product _nikeGlove = new Product
-        {
-            Description = "fits like Nike glove",
-            Make = "Slazengar",
-            Model = "sport",
-            Price = 11.0,
-            ProductId = "112"
-        };
-
 
         [Fact]
         public void GetId_WhenProductIdExists_ThenReturnProduct()
@@ -62,17 +42,16 @@ namespace Romina.Api.UnitTests.Controllers
             Assert.Equal(BasicId, result.Value.ProductId);
         }
 
-        [Fact(Skip="still struggling a bit")]//when you search for a product that doesnt exist should an empty product be returned?
-                //still trying to figure this one out, the .GetProductById() method returns a product so I need to keep within the constraints
+        [Fact]
         public void GetId_WhenProductIdDoesNotExist_ThenReturnNotFound()
         {
             var productController = new ProductController(
                 _productRepository.Object,
                 _productHandler.Object);
 
-            //_productRepository.Setup(pr => pr.GetProductById(BasicId)).Returns(new Product);
+            _productRepository.Setup(pr => pr.GetProductById(BasicId)).Returns(It.IsAny<Product>());
 
-            var result = productController.Get(BasicId); //is this string supposed to be BasicId
+            var result = productController.Get(BasicId);
             
             var expectedResult = new NotFoundResult();
 
@@ -84,9 +63,9 @@ namespace Romina.Api.UnitTests.Controllers
         public void GetByQuery_WhenProductsExist_ReturnProducts()
         {
             List<Product> listOfProducts = new List<Product>();
-            listOfProducts.Add(_nikeGlove);
-            listOfProducts.Add(_nikeTrouser);
-            listOfProducts.Add(_nikeHat);
+            listOfProducts.Add(It.IsAny<Product>());
+            listOfProducts.Add(It.IsAny<Product>());
+            listOfProducts.Add(It.IsAny<Product>());
 
             var controller = new ProductController(_productRepository.Object, _productHandler.Object);
             _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
