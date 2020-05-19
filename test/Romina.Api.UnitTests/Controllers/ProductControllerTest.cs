@@ -96,5 +96,19 @@ namespace Romina.Api.UnitTests.Controllers
 
             Assert.NotNull(result);
         }
+        
+        [Fact]
+        public void GetByQuery_WhenProductsDontExist_ReturnEmptyList()
+        {
+            List<Product> listOfProducts = new List<Product>();
+
+            var controller = new ProductController(_productRepository.Object, _productHandler.Object);
+            _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
+                .Returns(listOfProducts);
+
+            var result = controller.GetByQuery(BasicMake);
+
+            Assert.Empty(result);
+        }
     }
 }
