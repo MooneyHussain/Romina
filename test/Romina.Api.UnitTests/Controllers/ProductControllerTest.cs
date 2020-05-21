@@ -82,6 +82,7 @@ namespace Romina.Api.UnitTests.Controllers
             List<Product> listOfProducts = new List<Product>();
 
             var controller = new ProductController(_productRepository.Object, _productHandler.Object);
+
             _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
                 .Returns(listOfProducts);
 

@@ -37,6 +37,48 @@ namespace Romina.Api.UnitTests.Handlers
             Assert.Equal(Filter, result[2].Description);
         }
 
+        [Fact]
+        public void GetProductsByFilter_WhenProductsPartlyMatchFilter_ReturnProductsInOrder()
+        {
+            var nikeHoodieFilter = "Nike Hoodie";
+
+            var productOne = CreateProduct(
+                "Nike", 
+                "Hoodie", 
+                "1", 
+                "Nike Club zip up hoodie in grey", 
+                45);
+
+            var productTwo = CreateProduct(
+                "Puma",
+                "Hoodie",
+                "2",
+                "Puma Hooded Jacket",
+                30);
+
+            var productThree = CreateProduct(
+                "Matalan",
+                "Jacket",
+                "3",
+                "Grey jacket with hood, sometimes referred to as a hoodie",
+                8);
+
+            _productRepository.Setup(pr => pr.Query(It.IsAny<string>()))
+                .Returns(new List<Product> 
+                { 
+                    productThree, productTwo, productOne 
+                });
+
+            var handler = new ProductHandler(_productRepository.Object);
+            
+            var result = handler.GetProductsByFilter(nikeHoodieFilter);
+
+            Assert.Equal(3, result.Count());
+            Assert.Equal(productOne.ProductId, result.ElementAt(0).ProductId);
+            Assert.Equal(productTwo.ProductId, result.ElementAt(1).ProductId);
+            Assert.Equal(productThree.ProductId, result.ElementAt(2).ProductId);
+        }
+
         private Product CreateProduct(
             string make, string model, 
             string productId, string description, 
