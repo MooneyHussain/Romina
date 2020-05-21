@@ -38,7 +38,7 @@ namespace Romina.Api.UnitTests.Handlers
         }
 
         [Fact]
-        public void GetProductsByFilter_WhenProductsPartlyMatchFilter_ReturnProductsInOrder()
+        public void GetProductsByFilter_WhenProductsPartlyMatchTheFilter_ReturnProductsInExpectedOrder()
         {
             var nikeHoodieFilter = "Nike Hoodie";
 
