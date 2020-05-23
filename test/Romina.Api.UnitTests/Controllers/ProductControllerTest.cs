@@ -63,9 +63,6 @@ namespace Romina.Api.UnitTests.Controllers
         public void GetByQuery_WhenProductsExist_ReturnProducts()
         {
             List<Product> listOfProducts = new List<Product>();
-            listOfProducts.Add(It.IsAny<Product>());
-            listOfProducts.Add(It.IsAny<Product>());
-            listOfProducts.Add(It.IsAny<Product>());
 
             var controller = new ProductController(_productRepository.Object, _productHandler.Object);
             _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
