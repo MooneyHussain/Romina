@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
-using Dapper;
+﻿using Dapper;
 using Romina.Api.Models;
 using Romina.Api.Settings;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -14,6 +15,15 @@ namespace Romina.Api.Repositories
         public ProductRepository(SqlSettings settings)
         {
             this.settings = settings;
+        }
+
+        public List<Product> Query(string filter)
+        {
+            // this method takes in a filter aka 'nike trainers'
+            // and searches the database for any products that match this
+            // --- implementation can all be added later (for now don't worry)
+
+            throw new NotImplementedException();
         }
 
         public Product GetProductById(string id)
@@ -29,23 +39,11 @@ namespace Romina.Api.Repositories
 
             return product;
         }
-
-        public Product GetProductByMake(string basicMake)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public Product GetProductByModel(object basicModel)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
     public interface IProductRepository
     {
         Product GetProductById(string id);
-        Product GetProductByMake(string basicMake);
-        Product GetProductByModel(object basicModel);
+        List<Product> Query(string filter);
     }
-
 }
