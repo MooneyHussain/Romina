@@ -16,15 +16,67 @@ namespace Romina.Api.Handlers
 
         public IEnumerable<Product> GetProductsByFilter(string filter)
         {
+            var splitFilter = filter.ToLower().Split(' ');
+
             var unsortedRelatedProducts = _productRepository.Query(filter);
 
             var sortedList = new List<Product>();
 
-            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Make == filter));
-            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Model == filter));
-            sortedList.AddRange(unsortedRelatedProducts.Where(product => product.Description == filter));
+            foreach (var product in unsortedRelatedProducts)
+            {
+                foreach (var param in splitFilter)
+                {
+                    if (product.Make.ToLower().Contains(param))
+                    {
+                        if (!IsDuplicate(product, sortedList))
+                        {
+                            sortedList.Add(product);
+                        }
+                    }
+                }
+            }
 
+            foreach (var product in unsortedRelatedProducts)
+            {
+                foreach (var param in splitFilter)
+                {
+                    if (product.Model.ToLower().Contains(param))
+                    {
+                        if (!IsDuplicate(product, sortedList))
+                        {
+                            sortedList.Add(product);
+                        }
+                    }
+                }
+            }
+
+            foreach (var product in unsortedRelatedProducts)
+            {
+                foreach (var param in splitFilter)
+                {
+                    if (product.Description.ToLower().Contains(param))
+                    {
+                        if (!IsDuplicate(product, sortedList))
+                        {
+                            sortedList.Add(product);
+                        }
+                    }
+                }
+            }
             return sortedList;
+        }
+
+        public bool IsDuplicate(Product newProduct, List<Product> listofProd)
+        {
+            foreach (var product in listofProd)
+            {
+                if (product.Equals(newProduct))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 
