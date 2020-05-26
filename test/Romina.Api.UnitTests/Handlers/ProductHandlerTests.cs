@@ -37,11 +37,13 @@ namespace Romina.Api.UnitTests.Handlers
             Assert.Equal(Filter, result[2].Description);
         }
 
-        [Fact]
-        public void GetProductsByFilter_WhenProductsPartlyMatchTheFilter_ReturnProductsInExpectedOrder()
+        [Theory]
+        [InlineData("Nike Hoodie")]
+        [InlineData("Nike  Hoodie")]
+        [InlineData("Nike   Hoodie")]
+        [InlineData("Nike   Hoodie  ")]
+        public void GetProductsByFilter_WhenProductsPartlyMatchTheFilter_ReturnProductsInExpectedOrder(string filter)
         {
-            var nikeHoodieFilter = "Nike Hoodie";
-
             var productOne = CreateProduct(
                 "Nike", 
                 "Hoodie", 
@@ -71,7 +73,7 @@ namespace Romina.Api.UnitTests.Handlers
 
             var handler = new ProductHandler(_productRepository.Object);
             
-            var result = handler.GetProductsByFilter(nikeHoodieFilter);
+            var result = handler.GetProductsByFilter(filter);
 
             Assert.Equal(3, result.Count());
             Assert.Equal(productOne.ProductId, result.ElementAt(0).ProductId);
