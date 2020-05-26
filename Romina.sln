@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.705
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29409.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Romina.Api", "Romina.Api\Romina.Api.csproj", "{C8A91A20-D561-4D40-8A30-4D5957171C82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romina.Api", "Romina.Api\Romina.Api.csproj", "{C8A91A20-D561-4D40-8A30-4D5957171C82}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{EA67470D-7BD9-4909-BBA3-807952451685}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Romina.Api.UnitTests", "test\Romina.Api.UnitTests\Romina.Api.UnitTests.csproj", "{52983741-2E5B-4A2F-9BCF-E1FF120F2962}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romina.Api.UnitTests", "test\Romina.Api.UnitTests\Romina.Api.UnitTests.csproj", "{52983741-2E5B-4A2F-9BCF-E1FF120F2962}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Romina.Api.AcceptanceTests", "test\Romina.Api.AcceptanceTests\Romina.Api.AcceptanceTests.csproj", "{06CFDA5C-3162-4989-ADCA-40CCD1685914}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Romina.Api.AcceptanceTests", "test\Romina.Api.AcceptanceTests\Romina.Api.AcceptanceTests.csproj", "{06CFDA5C-3162-4989-ADCA-40CCD1685914}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
