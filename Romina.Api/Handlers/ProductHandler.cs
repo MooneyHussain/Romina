@@ -17,6 +17,7 @@ namespace Romina.Api.Handlers
         public IEnumerable<Product> GetProductsByFilter(string filter)
         {
             var splitFilter = filter.ToLower().Split(' ');
+            splitFilter = splitFilter.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToArray();
 
             var unsortedRelatedProducts = _productRepository.Query(filter);
 
