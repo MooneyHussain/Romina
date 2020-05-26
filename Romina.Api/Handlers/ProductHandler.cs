@@ -24,59 +24,28 @@ namespace Romina.Api.Handlers
 
             foreach (var product in unsortedRelatedProducts)
             {
-                foreach (var param in splitFilter)
-                {
-                    if (product.Make.ToLower().Contains(param))
-                    {
-                        if (!IsDuplicate(product, sortedList))
-                        {
-                            sortedList.Add(product);
-                        }
-                    }
-                }
+                sortedList.AddRange(from param in splitFilter 
+                    where product.Make.ToLower().Contains(param) select product);
             }
 
-            foreach (var product in unsortedRelatedProducts)
+            foreach (var product in unsortedRelatedProducts.Where(product => !IsDuplicate(product, sortedList)))
             {
-                foreach (var param in splitFilter)
-                {
-                    if (product.Model.ToLower().Contains(param))
-                    {
-                        if (!IsDuplicate(product, sortedList))
-                        {
-                            sortedList.Add(product);
-                        }
-                    }
-                }
+                sortedList.AddRange(from param in splitFilter 
+                    where product.Model.ToLower().Contains(param) select product);
             }
 
-            foreach (var product in unsortedRelatedProducts)
+            foreach (var product in unsortedRelatedProducts.Where(product => !IsDuplicate(product, sortedList)))
             {
-                foreach (var param in splitFilter)
-                {
-                    if (product.Description.ToLower().Contains(param))
-                    {
-                        if (!IsDuplicate(product, sortedList))
-                        {
-                            sortedList.Add(product);
-                        }
-                    }
-                }
+                sortedList.AddRange(from param in splitFilter 
+                    where product.Description.ToLower().Contains(param) select product);
             }
+
             return sortedList;
         }
 
         public bool IsDuplicate(Product newProduct, List<Product> listofProd)
         {
-            foreach (var product in listofProd)
-            {
-                if (product.Equals(newProduct))
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return Enumerable.Contains(listofProd, newProduct);
         }
     }
 
