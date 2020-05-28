@@ -21,25 +21,10 @@ namespace Romina.Api.Handlers
 
             var unsortedRelatedProducts = _productRepository.Query(filter);
 
-            var sortedList = new List<Product>();
-
-            foreach (var product in unsortedRelatedProducts)
-            {
-                sortedList.AddRange(from param in splitFilter 
-                    where product.Make.ToLower().Contains(param) select product);
-            }
-
-            foreach (var product in unsortedRelatedProducts.Where(product => !IsDuplicate(product, sortedList)))
-            {
-                sortedList.AddRange(from param in splitFilter 
-                    where product.Model.ToLower().Contains(param) select product);
-            }
-
-            foreach (var product in unsortedRelatedProducts.Where(product => !IsDuplicate(product, sortedList)))
-            {
-                sortedList.AddRange(from param in splitFilter 
-                    where product.Description.ToLower().Contains(param) select product);
-            }
+            var sortedList = unsortedRelatedProducts
+                .OrderByDescending(pr => splitFilter.Any(x => x == pr.Make.ToLower()))
+                .ThenByDescending(pr => splitFilter.Any(y => y == pr.Model.ToLower()))
+                .ThenByDescending(pr => splitFilter.Any(z => z == pr.Description.ToLower()));
 
             return sortedList;
         }
@@ -54,4 +39,5 @@ namespace Romina.Api.Handlers
     {
         IEnumerable<Product> GetProductsByFilter(string filter);
     }
+
 }
