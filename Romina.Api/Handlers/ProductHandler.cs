@@ -2,6 +2,7 @@
 using Romina.Api.Repositories;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Romina.Api.Handlers
 {
@@ -16,8 +17,8 @@ namespace Romina.Api.Handlers
 
         public IEnumerable<Product> GetProductsByFilter(string filter)
         {
+            filter = Regex.Replace(filter, @"\s+", " ");
             var splitFilter = filter.ToLower().Split(' ');
-            splitFilter = splitFilter.Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToArray();
 
             var unsortedRelatedProducts = _productRepository.Query(filter);
 
@@ -27,11 +28,6 @@ namespace Romina.Api.Handlers
                 .ThenByDescending(pr => splitFilter.Any(z => z == pr.Description.ToLower()));
 
             return sortedList;
-        }
-
-        public bool IsDuplicate(Product newProduct, List<Product> listofProd)
-        {
-            return Enumerable.Contains(listofProd, newProduct);
         }
     }
 
