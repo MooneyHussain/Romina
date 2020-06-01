@@ -3,6 +3,7 @@ using Romina.Api.Models;
 using Romina.Api.Settings;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 
@@ -11,10 +12,12 @@ namespace Romina.Api.Repositories
     public class ProductRepository: IProductRepository
     {
         private readonly SqlSettings settings;
+        private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 
-        public ProductRepository(SqlSettings settings)
+        public ProductRepository(SqlSettings settings, IDatabaseConnectionFactory databaseConnectionFactory)
         {
             this.settings = settings;
+            _databaseConnectionFactory = databaseConnectionFactory;
         }
 
         public List<Product> Query(string filter)
@@ -29,7 +32,7 @@ namespace Romina.Api.Repositories
         public Product GetProductById(string id)
         {
             Product product = null;
-            using (SqlConnection connection = new SqlConnection(settings.ConnectionString))
+            using (var connection = _databaseConnectionFactory.GetConnection(settings.ConnectionString))
             {
                 var products = connection.Query<Product>("SELECT * FROM PRODUCT WHERE ID= @id",id)
                     .ToList();
@@ -39,6 +42,11 @@ namespace Romina.Api.Repositories
 
             return product;
         }
+    }
+
+    public interface IDatabaseConnectionFactory
+    {
+        IDbConnection GetConnection(string connectionString);
     }
 
     public interface IProductRepository
