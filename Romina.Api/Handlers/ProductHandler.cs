@@ -29,11 +29,17 @@ namespace Romina.Api.Handlers
 
             return sortedList;
         }
+
+        public Product GetProductById(string id)
+        {
+            return _productRepository.GetProductById(id);
+        }
     }
 
     public interface IProductHandler
     {
         IEnumerable<Product> GetProductsByFilter(string filter);
+        Product GetProductById(string id);
     }
 
 }

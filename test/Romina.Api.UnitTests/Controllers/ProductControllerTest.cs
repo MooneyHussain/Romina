@@ -4,7 +4,6 @@ using Moq;
 using Romina.Api.Controllers;
 using Romina.Api.Handlers;
 using Romina.Api.Models;
-using Romina.Api.Repositories;
 using Xunit;
 
 namespace Romina.Api.UnitTests.Controllers
@@ -14,7 +13,6 @@ namespace Romina.Api.UnitTests.Controllers
         private const string BasicId = "111";
         private const string BasicMake = "Nike";
 
-        private readonly Mock<IProductRepository> _productRepository = new Mock<IProductRepository>();
         private readonly Mock<IProductHandler> _productHandler = new Mock<IProductHandler>();
 
         private readonly Product _nikeTrouser = new Product
@@ -29,12 +27,10 @@ namespace Romina.Api.UnitTests.Controllers
         [Fact]
         public void GetId_WhenProductIdExists_ThenReturnProduct()
         {
-            _productRepository.Setup(pr => pr.GetProductById(BasicId))
+            _productHandler.Setup(pr => pr.GetProductById(BasicId))
                 .Returns(_nikeTrouser);
 
-            var productController = new ProductController(
-                _productRepository.Object, 
-                _productHandler.Object);
+            var productController = new ProductController(_productHandler.Object);
 
             var result = productController.Get(BasicId);
 
@@ -45,11 +41,7 @@ namespace Romina.Api.UnitTests.Controllers
         [Fact]
         public void GetId_WhenProductIdDoesNotExist_ThenReturnNotFound()
         {
-            var productController = new ProductController(
-                _productRepository.Object,
-                _productHandler.Object);
-
-            _productRepository.Setup(pr => pr.GetProductById(BasicId)).Returns(It.IsAny<Product>());
+            var productController = new ProductController(_productHandler.Object);
 
             var result = productController.Get(BasicId);
             
@@ -62,11 +54,10 @@ namespace Romina.Api.UnitTests.Controllers
         [Fact]
         public void GetByQuery_WhenProductsExist_ReturnProducts()
         {
-            List<Product> listOfProducts = new List<Product>();
+            var controller = new ProductController(_productHandler.Object);
 
-            var controller = new ProductController(_productRepository.Object, _productHandler.Object);
             _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
-                .Returns(listOfProducts);
+                .Returns(new List<Product>());
 
             var result = controller.GetByQuery(BasicMake);
 
@@ -76,12 +67,10 @@ namespace Romina.Api.UnitTests.Controllers
         [Fact]
         public void GetByQuery_WhenProductsDontExist_ReturnEmptyList()
         {
-            List<Product> listOfProducts = new List<Product>();
-
-            var controller = new ProductController(_productRepository.Object, _productHandler.Object);
+            var controller = new ProductController(_productHandler.Object);
 
             _productHandler.Setup(ph => ph.GetProductsByFilter(BasicMake))
-                .Returns(listOfProducts);
+                .Returns(new List<Product>());
 
             var result = controller.GetByQuery(BasicMake);
 

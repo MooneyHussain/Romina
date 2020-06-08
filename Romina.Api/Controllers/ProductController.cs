@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Romina.Api.Handlers;
 using Romina.Api.Models;
-using Romina.Api.Repositories;
 using System.Collections.Generic;
 
 namespace Romina.Api.Controllers
@@ -9,14 +8,10 @@ namespace Romina.Api.Controllers
     [Route("api/product")]
     public class ProductController : Controller
     {
-        private readonly IProductRepository _productRepository;
         private readonly IProductHandler _productHandler;
 
-        public ProductController(
-            IProductRepository productRepository, 
-            IProductHandler productHandler)
+        public ProductController(IProductHandler productHandler)
         {
-            _productRepository = productRepository;
             _productHandler = productHandler;
         }
 
@@ -25,7 +20,7 @@ namespace Romina.Api.Controllers
         {
             // TODO (at a later date): add GetProductById functionality into IProductHandler
             // this means we don't need to inject *both* IProductRepository and IProductHandler
-            var product = _productRepository.GetProductById(id);
+            var product = _productHandler.GetProductById(id);
 
             if (product == null)
                 return new NotFoundResult();
