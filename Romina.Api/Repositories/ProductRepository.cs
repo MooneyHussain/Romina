@@ -4,7 +4,6 @@ using Romina.Api.Settings;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 
 namespace Romina.Api.Repositories
@@ -32,9 +31,10 @@ namespace Romina.Api.Repositories
         public Product GetProductById(string id)
         {
             Product product = null;
+            var sql = "SELECT * FROM PRODUCTS WHERE ProductId= '" + id + "'";
             using (var connection = _databaseConnectionFactory.GetConnection(settings.ConnectionString))
             {
-                var products = connection.Query<Product>("SELECT * FROM PRODUCT WHERE ID= @id",id)
+                var products = connection.Query<Product>(sql)//<Product>("SELECT * FROM PRODUCTS WHERE ProductId= @id",id)
                     .ToList();
 
                 product = products[0];

@@ -21,7 +21,9 @@ namespace Romina.Api.AcceptanceTests
 
         public void Add(Product product)
         {
+            string sql = "INSERT INTO Products (ProductId,Make, Model,Description,Price) Values (@ProductId, @Make, @Model, @Description, @Price);";
 
+            Connection.Execute(sql, new {product.ProductId, product.Make, product.Model, product.Description,product.Price});
         }
     }
 }
